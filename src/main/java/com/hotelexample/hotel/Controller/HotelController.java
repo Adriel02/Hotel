@@ -81,8 +81,21 @@ public class HotelController {
         BooleanExpression filterByPrice = qHotel.pricePerNighht.lt(maxPrice); //Price less than maxPrice
         BooleanExpression filterByRating = qHotel.reviews.any().rating.gt(minRating); // Some review that his rating is geater than minRating
 
-        List<Hotel> recomentedHotels = (List<Hotel>) this.hotelRepository.findAll(filterByPrice.and(filterByRating));
-        return recomentedHotels;
+         return (List<Hotel>) this.hotelRepository.findAll(filterByPrice.and(filterByRating));
+
+    }
+
+
+    @GetMapping("/notRecommended")
+    public List<Hotel> getBadhotel(){
+        final int maxPrice = 150;
+        final int maxRating = 5;
+
+        QHotel qHotel = new QHotel("hotel");
+        BooleanExpression filterByBadPrice = qHotel.pricePerNighht.gt(maxPrice);
+        BooleanExpression filterByBadRating = qHotel.reviews.any().rating.lt(maxRating);
+
+        return (List<Hotel>) this.hotelRepository.findAll(filterByBadPrice.and(filterByBadRating));
 
     }
 
